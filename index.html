@@ -7,6 +7,60 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* フォントサイズ変数（小） */
+    :root {
+      --fs-title: 20px;
+      --fs-sub: 13px;
+      --fs-label: 15px;
+      --fs-input: 22px;
+      --fs-unit: 15px;
+      --fs-slider: 16px;
+      --fs-opt-label: 14px;
+      --fs-opt-badge: 11px;
+      --fs-result-label: 13px;
+      --fs-price: 48px;
+      --fs-price-unit: 22px;
+      --fs-breakdown: 13px;
+      --fs-table-title: 13px;
+      --fs-table-row: 13px;
+    }
+
+    /* 中 */
+    :root.size-md {
+      --fs-title: 28px;
+      --fs-sub: 17px;
+      --fs-label: 19px;
+      --fs-input: 28px;
+      --fs-unit: 19px;
+      --fs-slider: 22px;
+      --fs-opt-label: 19px;
+      --fs-opt-badge: 15px;
+      --fs-result-label: 17px;
+      --fs-price: 56px;
+      --fs-price-unit: 28px;
+      --fs-breakdown: 17px;
+      --fs-table-title: 16px;
+      --fs-table-row: 17px;
+    }
+
+    /* 大 */
+    :root.size-lg {
+      --fs-title: 36px;
+      --fs-sub: 21px;
+      --fs-label: 23px;
+      --fs-input: 33px;
+      --fs-unit: 23px;
+      --fs-slider: 30px;
+      --fs-opt-label: 24px;
+      --fs-opt-badge: 20px;
+      --fs-result-label: 21px;
+      --fs-price: 64px;
+      --fs-price-unit: 36px;
+      --fs-breakdown: 21px;
+      --fs-table-title: 20px;
+      --fs-table-row: 21px;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
       background: #f5f5f5;
@@ -26,15 +80,52 @@
       max-width: 420px;
     }
 
+    .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      gap: 8px;
+    }
+
     h1 {
-      font-size: 36px;
+      font-size: var(--fs-title);
       font-weight: 700;
       color: #1a1a1a;
-      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    /* 文字サイズ切替ボタン */
+    .size-switcher {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .size-btn {
+      border: 1.5px solid #ddd;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #888;
+      padding: 3px 7px;
+      transition: all 0.15s;
+    }
+
+    .size-btn:nth-child(1) { font-size: 11px; }
+    .size-btn:nth-child(2) { font-size: 14px; }
+    .size-btn:nth-child(3) { font-size: 17px; }
+
+    .size-btn.active {
+      border-color: #ff6b35;
+      color: #ff6b35;
+      background: #fff5f1;
     }
 
     .subtitle {
-      font-size: 21px;
+      font-size: var(--fs-sub);
       color: #888;
       margin-bottom: 24px;
     }
@@ -45,7 +136,7 @@
 
     label {
       display: block;
-      font-size: 23px;
+      font-size: var(--fs-label);
       font-weight: 700;
       color: #222;
       margin-bottom: 8px;
@@ -62,7 +153,7 @@
       padding: 14px 16px;
       border: 2px solid #ddd;
       border-radius: 10px;
-      font-size: 33px;
+      font-size: var(--fs-input);
       font-weight: 700;
       color: #1a1a1a;
       outline: none;
@@ -74,7 +165,7 @@
     }
 
     .unit {
-      font-size: 23px;
+      font-size: var(--fs-unit);
       color: #666;
       white-space: nowrap;
     }
@@ -92,7 +183,7 @@
     }
 
     .slider-val {
-      font-size: 30px;
+      font-size: var(--fs-slider);
       font-weight: 700;
       color: #ff6b35;
       min-width: 65px;
@@ -119,13 +210,13 @@
     .option-row:hover { background: #f0f0f0; }
 
     .option-label {
-      font-size: 24px;
+      font-size: var(--fs-opt-label);
       font-weight: 600;
       color: #222;
     }
 
     .option-badge {
-      font-size: 20px;
+      font-size: var(--fs-opt-badge);
       color: #888;
       margin-top: 3px;
     }
@@ -179,21 +270,21 @@
     }
 
     .result-label {
-      font-size: 21px;
+      font-size: var(--fs-result-label);
       opacity: 0.9;
       margin-bottom: 8px;
       font-weight: 600;
     }
 
     .result-price {
-      font-size: 64px;
+      font-size: var(--fs-price);
       font-weight: 800;
       letter-spacing: -1px;
       line-height: 1;
     }
 
     .result-price span {
-      font-size: 36px;
+      font-size: var(--fs-price-unit);
       font-weight: 600;
     }
 
@@ -209,7 +300,7 @@
     .breakdown-row {
       display: flex;
       justify-content: space-between;
-      font-size: 21px;
+      font-size: var(--fs-breakdown);
       opacity: 0.95;
     }
 
@@ -221,7 +312,7 @@
     }
 
     .fare-table-title {
-      font-size: 20px;
+      font-size: var(--fs-table-title);
       font-weight: 700;
       color: #666;
       padding: 10px 14px;
@@ -233,7 +324,7 @@
       display: flex;
       justify-content: space-between;
       padding: 10px 14px;
-      font-size: 21px;
+      font-size: var(--fs-table-row);
       color: #444;
       border-bottom: 1px solid #f0f0f0;
     }
@@ -244,7 +335,14 @@
 </head>
 <body>
   <div class="container">
-    <h1>🚕 タクシー料金計算機</h1>
+    <div class="header">
+      <h1>🚕 タクシー料金計算機</h1>
+      <div class="size-switcher">
+        <button class="size-btn" data-size="size-sm">小</button>
+        <button class="size-btn active" data-size="size-md">中</button>
+        <button class="size-btn" data-size="size-lg">大</button>
+      </div>
+    </div>
     <p class="subtitle">周南市・下松市エリア対応</p>
 
     <div class="section">
@@ -323,6 +421,25 @@
     const totalPrice = document.getElementById('totalPrice');
     const breakdown = document.getElementById('breakdown');
 
+    // 文字サイズ切替
+    const root = document.documentElement;
+    const sizeBtns = document.querySelectorAll('.size-btn');
+    const STORAGE_KEY = 'taxi-font-size';
+
+    function applySize(size) {
+      root.classList.remove('size-sm', 'size-md', 'size-lg');
+      if (size === 'size-md' || size === 'size-lg') root.classList.add(size);
+      sizeBtns.forEach(b => b.classList.toggle('active', b.dataset.size === size));
+      localStorage.setItem(STORAGE_KEY, size);
+    }
+
+    sizeBtns.forEach(btn => {
+      btn.addEventListener('click', () => applySize(btn.dataset.size));
+    });
+
+    // 前回の設定を復元（デフォルト：大）
+    applySize(localStorage.getItem(STORAGE_KEY) || 'size-md');
+
     function calcFare(km) {
       const BASE_FARE = 730;
       const BASE_KM = 1.5;
@@ -397,7 +514,7 @@
     distInput.addEventListener('input', () => {
       const v = parseFloat(distInput.value) || 0;
       distDisplay.textContent = v.toFixed(1);
-      distSlider.value = Math.min(v, 30);
+      distSlider.value = Math.min(v, 50);
       update();
     });
 
