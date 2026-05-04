@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>タクシー料金計算機</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 24px;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 8px;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    input[type="number"] {
+      flex: 1;
+      padding: 12px 14px;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="number"]:focus {
+      border-color: #ff6b35;
+    }
+
+    .unit {
+      font-size: 15px;
+      color: #666;
+      white-space: nowrap;
+    }
+
+    .slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      accent-color: #ff6b35;
+      height: 6px;
+    }
+
+    .slider-val {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ff6b35;
+      min-width: 50px;
+      text-align: right;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8f8f8;
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .option-row:hover { background: #f0f0f0; }
+
+    .option-label {
+      font-size: 13px;
+      color: #333;
+    }
+
+    .option-badge {
+      font-size: 11px;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .toggle input { display: none; }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #ccc;
+      border-radius: 13px;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+
+    .toggle-slider::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .toggle input:checked + .toggle-slider { background: #ff6b35; }
+    .toggle input:checked + .toggle-slider::after { transform: translateX(18px); }
+
+    .divider {
+      height: 1px;
+      background: #eee;
+      margin: 20px 0;
+    }
+
+    .result-card {
+      background: linear-gradient(135deg, #ff6b35, #ff8c5a);
+      border-radius: 14px;
+      padding: 20px;
+      color: white;
+      text-align: center;
+    }
+
+    .result-label {
+      font-size: 12px;
+      opacity: 0.85;
+      margin-bottom: 6px;
+    }
+
+    .result-price {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .result-price span {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .result-breakdown {
+      margin-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.3);
+      padding-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .fare-table {
+      margin-top: 24px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #eee;
+    }
+
+    .fare-table-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      padding: 8px 12px;
+      background: #f8f8f8;
+      border-bottom: 1px solid #eee;
+    }
+
+    .fare-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: #444;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .fare-row:last-child { border-bottom: none; }
+    .fare-row strong { color: #1a1a1a; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚕 タクシー料金計算機</h1>
+    <p class="subtitle">周南市・下松市エリア対応</p>
+
+    <div class="section">
+      <label>走行距離</label>
+      <div class="slider-wrap">
+        <input type="range" id="distSlider" min="0" max="30" step="0.1" value="3">
+        <div class="slider-val"><span id="distDisplay">3.0</span> km</div>
+      </div>
+      <div class="input-wrap" style="margin-top: 10px;">
+        <input type="number" id="distInput" value="3.0" min="0" max="999" step="0.1">
+        <span class="unit">km</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <label>オプション</label>
+      <div class="options">
+        <label class="option-row" for="nightToggle">
+          <div>
+            <div class="option-label">深夜・早朝割増</div>
+            <div class="option-badge">22時〜翌5時 ＋2割</div>
+          </div>
+          <div class="toggle">
+            <input type="checkbox" id="nightToggle">
+            <div class="toggle-slider"></div>
+          </div>
+        </label>
+        <label class="option-row" for="disabledToggle">
+          <div>
+            <div class="option-label">障がい者割引</div>
+            <div class="option-badge">身体・知的障がい者 −1割</div>
+          </div>
+          <div class="toggle">
+            <input type="checkbox" id="disabledToggle">
+            <div class="toggle-slider"></div>
+          </div>
+        </label>
+        <label class="option-row" for="pickupToggle">
+          <div>
+            <div class="option-label">迎車回送料金</div>
+            <div class="option-badge">回送距離2km以上の場合 ＋250円</div>
+          </div>
+          <div class="toggle">
+            <input type="checkbox" id="pickupToggle">
+            <div class="toggle-slider"></div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="result-card">
+      <div class="result-label">概算料金</div>
+      <div class="result-price" id="totalPrice">—<span>円</span></div>
+      <div class="result-breakdown" id="breakdown"></div>
+    </div>
+
+    <div class="fare-table">
+      <div class="fare-table-title">料金表（参考）</div>
+      <div class="fare-row"><span>初乗り（〜1.5km）</span><strong>730円</strong></div>
+      <div class="fare-row"><span>加算（255mごと）</span><strong>80円</strong></div>
+      <div class="fare-row"><span>深夜早朝割増</span><strong>＋20%</strong></div>
+      <div class="fare-row"><span>障がい者割引</span><strong>−10%</strong></div>
+      <div class="fare-row"><span>迎車回送（2km以上）</span><strong>＋250円</strong></div>
+    </div>
+  </div>
+
+  <script>
+    const distSlider = document.getElementById('distSlider');
+    const distInput = document.getElementById('distInput');
+    const distDisplay = document.getElementById('distDisplay');
+    const nightToggle = document.getElementById('nightToggle');
+    const disabledToggle = document.getElementById('disabledToggle');
+    const pickupToggle = document.getElementById('pickupToggle');
+    const totalPrice = document.getElementById('totalPrice');
+    const breakdown = document.getElementById('breakdown');
+
+    function calcFare(km) {
+      const BASE_FARE = 730;
+      const BASE_KM = 1.5;
+      const ADD_FARE = 80;
+      const ADD_METER = 0.255;
+
+      if (km <= 0) return { base: 0, add: 0, subtotal: 0 };
+
+      let base = BASE_FARE;
+      let add = 0;
+
+      if (km > BASE_KM) {
+        const extra = km - BASE_KM;
+        const units = Math.ceil(extra / ADD_METER);
+        add = units * ADD_FARE;
+      }
+
+      return { base, add, subtotal: base + add };
+    }
+
+    function update() {
+      const km = parseFloat(distInput.value) || 0;
+      const isNight = nightToggle.checked;
+      const isDisabled = disabledToggle.checked;
+      const hasPickup = pickupToggle.checked;
+
+      const { base, add, subtotal } = calcFare(km);
+
+      let total = subtotal;
+      const rows = [];
+
+      rows.push(['初乗り運賃', `${base.toLocaleString()}円`]);
+      if (add > 0) rows.push([`加算運賃（${km > 1.5 ? (km - 1.5).toFixed(1) : 0}km分）`, `${add.toLocaleString()}円`]);
+
+      if (isNight) {
+        const surcharge = Math.round(total * 0.2);
+        total += surcharge;
+        rows.push(['深夜早朝割増（+20%）', `+${surcharge.toLocaleString()}円`]);
+      }
+
+      if (isDisabled) {
+        const discount = Math.round(total * 0.1);
+        total -= discount;
+        rows.push(['障がい者割引（-10%）', `−${discount.toLocaleString()}円`]);
+      }
+
+      if (hasPickup) {
+        total += 250;
+        rows.push(['迎車回送料金', '+250円']);
+      }
+
+      if (km <= 0) {
+        totalPrice.innerHTML = '—<span>円</span>';
+        breakdown.innerHTML = '';
+        return;
+      }
+
+      totalPrice.innerHTML = `${total.toLocaleString()}<span>円</span>`;
+      breakdown.innerHTML = rows.map(([k, v]) =>
+        `<div class="breakdown-row"><span>${k}</span><span>${v}</span></div>`
+      ).join('');
+    }
+
+    distSlider.addEventListener('input', () => {
+      const v = parseFloat(distSlider.value).toFixed(1);
+      distInput.value = v;
+      distDisplay.textContent = v;
+      update();
+    });
+
+    distInput.addEventListener('input', () => {
+      const v = parseFloat(distInput.value) || 0;
+      distDisplay.textContent = v.toFixed(1);
+      distSlider.value = Math.min(v, 30);
+      update();
+    });
+
+    nightToggle.addEventListener('change', update);
+    disabledToggle.addEventListener('change', update);
+    pickupToggle.addEventListener('change', update);
+
+    update();
+  </script>
+</body>
+</html>
