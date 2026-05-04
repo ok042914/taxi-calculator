@@ -27,14 +27,14 @@
     }
 
     h1 {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 700;
       color: #1a1a1a;
       margin-bottom: 4px;
     }
 
     .subtitle {
-      font-size: 12px;
+      font-size: 14px;
       color: #888;
       margin-bottom: 24px;
     }
@@ -45,9 +45,9 @@
 
     label {
       display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #444;
+      font-size: 15px;
+      font-weight: 700;
+      color: #222;
       margin-bottom: 8px;
     }
 
@@ -59,11 +59,11 @@
 
     input[type="number"] {
       flex: 1;
-      padding: 12px 14px;
-      border: 1.5px solid #ddd;
+      padding: 14px 16px;
+      border: 2px solid #ddd;
       border-radius: 10px;
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 22px;
+      font-weight: 700;
       color: #1a1a1a;
       outline: none;
       transition: border-color 0.2s;
@@ -92,10 +92,10 @@
     }
 
     .slider-val {
-      font-size: 16px;
+      font-size: 20px;
       font-weight: 700;
       color: #ff6b35;
-      min-width: 50px;
+      min-width: 65px;
       text-align: right;
     }
 
@@ -119,14 +119,15 @@
     .option-row:hover { background: #f0f0f0; }
 
     .option-label {
-      font-size: 13px;
-      color: #333;
+      font-size: 16px;
+      font-weight: 600;
+      color: #222;
     }
 
     .option-badge {
-      font-size: 11px;
+      font-size: 13px;
       color: #888;
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
     .toggle {
@@ -178,20 +179,21 @@
     }
 
     .result-label {
-      font-size: 12px;
-      opacity: 0.85;
-      margin-bottom: 6px;
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 8px;
+      font-weight: 600;
     }
 
     .result-price {
-      font-size: 48px;
+      font-size: 56px;
       font-weight: 800;
       letter-spacing: -1px;
       line-height: 1;
     }
 
     .result-price span {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 600;
     }
 
@@ -207,8 +209,8 @@
     .breakdown-row {
       display: flex;
       justify-content: space-between;
-      font-size: 12px;
-      opacity: 0.9;
+      font-size: 14px;
+      opacity: 0.95;
     }
 
     .fare-table {
@@ -219,10 +221,10 @@
     }
 
     .fare-table-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: #888;
-      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #666;
+      padding: 10px 14px;
       background: #f8f8f8;
       border-bottom: 1px solid #eee;
     }
@@ -230,8 +232,8 @@
     .fare-row {
       display: flex;
       justify-content: space-between;
-      padding: 8px 12px;
-      font-size: 12px;
+      padding: 10px 14px;
+      font-size: 14px;
       color: #444;
       border-bottom: 1px solid #f0f0f0;
     }
@@ -378,6 +380,7 @@
         return;
       }
 
+      total = Math.floor(total / 10) * 10;
       totalPrice.innerHTML = `${total.toLocaleString()}<span>円</span>`;
       breakdown.innerHTML = rows.map(([k, v]) =>
         `<div class="breakdown-row"><span>${k}</span><span>${v}</span></div>`
